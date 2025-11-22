@@ -1,0 +1,28 @@
+[
+  {
+    "code": "MA",
+    "name": {
+      "en": "Morocco",
+      "fr": "Maroc",
+      "ar": "المغرب"
+    },
+    "flag": "🇲🇦",
+    "productCount": 120,
+    "heroTitle": {
+      "en": "Official Morocco Kids Football Collection",
+      "fr": "Collection officielle football enfants du Maroc",
+      "ar": "مجموعة قمصان كرة القدم للأطفال - المغرب"
+    },
+    "heroSubtitle": {
+      "en": "Home & away kits, goalkeepers, training wear and lifestyle pieces inspired by the Atlas Lions.",
+      "fr": "Maillots domicile / extérieur, gardiens, training et tenues lifestyle inspirées بأسود الأطلس.",
+      "ar": "قمصان الدار والإياب، حراس المرمى، أقمصة التدريب وقطع كاجوال مستوحاة من أسود الأطلس."
+    },
+    "highlights": [
+      "Home & Away Kits",
+      "Goalkeeper Jerseys",
+      "Training & Warm-up",
+      "Kids Lifestyle & Hoodies"
+    ]
+  }
+]

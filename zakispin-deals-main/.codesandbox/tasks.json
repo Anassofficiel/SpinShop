@@ -1,0 +1,37 @@
+{
+  // ⚙️ هذه المهام كيتنفدو أول مرة كتفتح المشروع
+  "setupTasks": [
+    {
+      "name": "Installing Dependencies",
+      "command": "npm install"
+    }
+  ],
+
+  // 🚀 المهام الرئيسية اللي كيديرها CodeSandbox
+  "tasks": {
+    "dev": {
+      "name": "Start Dev Server",
+      "command": "npm run dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 8080,
+        "open": true
+      }
+    },
+    "build": {
+      "name": "Build for Production",
+      "command": "npm run build"
+    },
+    "preview": {
+      "name": "Preview Production Build",
+      "command": "npm run preview",
+      "preview": {
+        "port": 4173
+      }
+    },
+    "lint": {
+      "name": "Lint Check",
+      "command": "npm run lint"
+    }
+  }
+}

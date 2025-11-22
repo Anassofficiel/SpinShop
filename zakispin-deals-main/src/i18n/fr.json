@@ -1,0 +1,127 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "store": "Boutique",
+    "cart": "Panier",
+    "support": "Support"
+  },
+  "landing": {
+    "title": "Bienvenue sur SpinShop",
+    "subtitle": "Achetez, jouez et gagnez des offres incroyables!",
+    "cta": "Commencer",
+    "features": {
+      "spin": "Gagnez des réductions",
+      "countries": "Produits du monde entier",
+      "personalize": "Personnalisez vos produits",
+      "support": "Support 24/7"
+    }
+  },
+  "splash": {
+    "loading": "Chargement...",
+    "welcome": "Bienvenue"
+  },
+  "wheel": {
+    "title": "Gagnez votre offre!",
+    "subtitle": "Tournez la roue et obtenez des réductions incroyables",
+    "spin": "Tourner",
+    "spinning": "En cours...",
+    "retry": "Réessayer",
+    "continue": "Continuer",
+    "results": {
+      "discount10": "🎉 Félicitations! 10% de réduction",
+      "discount30": "🎊 Génial! 30% de réduction",
+      "freeShipping": "🚚 Livraison gratuite!",
+      "gift": "🎁 Cadeau gratuit avec votre commande!",
+      "retry": "😊 Réessayez!",
+      "badLuck": "😔 Plus de chance la prochaine fois!"
+    }
+  },
+  "store": {
+    "title": "Choisissez votre pays",
+    "subtitle": "Découvrez des produits du monde entier",
+    "products": "produit(s)"
+  },
+  "country": {
+    "products": "Produits",
+    "loadMore": "Charger plus",
+    "noMore": "Plus de produits"
+  },
+  "product": {
+    "addToCart": "Ajouter au panier",
+    "price": "Prix",
+    "customize": "Personnaliser",
+    "name": "Nom",
+    "number": "Numéro",
+    "fontPreview": "Aperçu de la police",
+    "description": "Description",
+    "inStock": "En stock"
+  },
+  "cart": {
+    "title": "Panier",
+    "empty": "Votre panier est vide",
+    "shopNow": "Acheter maintenant",
+    "subtotal": "Sous-total",
+    "discount": "Réduction",
+    "shipping": "Livraison",
+    "free": "Gratuit",
+    "total": "Total",
+    "checkout": "Passer commande",
+    "remove": "Retirer",
+    "activeOffer": "Offre active"
+  },
+  "checkout": {
+    "title": "Finaliser la commande",
+    "shipping": "Informations de livraison",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "city": "Ville",
+    "country": "Pays",
+    "postalCode": "Code postal",
+    "payment": "Informations de paiement",
+    "cardNumber": "Numéro de carte",
+    "expiry": "Expiration",
+    "cvv": "CVV",
+    "placeOrder": "Passer commande",
+    "processing": "Traitement..."
+  },
+  "orderConfirm": {
+    "title": "Merci pour votre commande!",
+    "message": "Votre commande a été reçue avec succès",
+    "orderNumber": "Numéro de commande",
+    "email": "Nous vous enverrons une confirmation par email",
+    "backToStore": "Retour à la boutique"
+  },
+  "support": {
+    "title": "Support & Aide",
+    "subtitle": "Nous sommes là pour vous aider!",
+    "email": "Email",
+    "phone": "Téléphone",
+    "hours": "Heures",
+    "hoursValue": "24/7",
+    "faq": "FAQ",
+    "contact": "Contactez-nous",
+    "message": "Votre message",
+    "send": "Envoyer"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Sauvegarder",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "viewMore": "Voir plus"
+  },
+  "auth": {
+    "logout": "Déconnexion"
+  }
+}

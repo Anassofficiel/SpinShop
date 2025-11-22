@@ -1,0 +1,127 @@
+{
+  "nav": {
+    "home": "Home",
+    "store": "Store",
+    "cart": "Cart",
+    "support": "Support"
+  },
+  "landing": {
+    "title": "Welcome to SpinShop",
+    "subtitle": "Shop, play, and win amazing offers!",
+    "cta": "Start Shopping",
+    "features": {
+      "spin": "Win Discounts",
+      "countries": "Products from All Countries",
+      "personalize": "Customize Products",
+      "support": "24/7 Support"
+    }
+  },
+  "splash": {
+    "loading": "Loading...",
+    "welcome": "Welcome"
+  },
+  "wheel": {
+    "title": "Win Your Offer!",
+    "subtitle": "Spin the wheel and get amazing discounts",
+    "spin": "Spin",
+    "spinning": "Spinning...",
+    "retry": "Retry",
+    "continue": "Continue Shopping",
+    "results": {
+      "discount10": "🎉 Congratulations! 10% Off",
+      "discount30": "🎊 Awesome! 30% Off",
+      "freeShipping": "🚚 Free Shipping!",
+      "gift": "🎁 Free Gift with Your Order!",
+      "retry": "😊 Try Again!",
+      "badLuck": "😔 Better Luck Next Time!"
+    }
+  },
+  "store": {
+    "title": "Choose Your Country",
+    "subtitle": "Discover products from around the world",
+    "products": "product(s)"
+  },
+  "country": {
+    "products": "Products",
+    "loadMore": "Load More",
+    "noMore": "No more products"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "price": "Price",
+    "customize": "Customize",
+    "name": "Name",
+    "number": "Number",
+    "fontPreview": "Font Preview",
+    "description": "Description",
+    "inStock": "In Stock"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "shopNow": "Shop Now",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "activeOffer": "Active Offer"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shipping": "Shipping Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "postalCode": "Postal Code",
+    "payment": "Payment Information",
+    "cardNumber": "Card Number",
+    "expiry": "Expiry",
+    "cvv": "CVV",
+    "placeOrder": "Place Order",
+    "processing": "Processing..."
+  },
+  "orderConfirm": {
+    "title": "Thank You for Your Order!",
+    "message": "Your order has been successfully received",
+    "orderNumber": "Order Number",
+    "email": "We'll send you a confirmation email",
+    "backToStore": "Back to Store"
+  },
+  "support": {
+    "title": "Support & Help",
+    "subtitle": "We're here to help you!",
+    "email": "Email",
+    "phone": "Phone",
+    "hours": "Hours",
+    "hoursValue": "24/7",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "message": "Your message",
+    "send": "Send"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewMore": "View More"
+  },
+  "auth": {
+    "logout": "Logout"
+  }
+}
