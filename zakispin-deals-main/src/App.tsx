@@ -24,6 +24,7 @@ import NotFound from './pages/NotFound';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Collection from './pages/Collection'; // 🔥 صفحة المجموعات الجديدة
 
 import { supabase } from './supabaseClient';
 import type { Session } from '@supabase/supabase-js';
@@ -111,6 +112,17 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+
+                {/* ✅ صفحة المجموعات (T-Shirts / Caps / Accessories) */}
+                <Route
+                  path="/collection/:slug"
+                  element={
+                    <ProtectedRoute>
+                      <Collection />
+                    </ProtectedRoute>
+                  }
+                />
+
                 <Route
                   path="/country/:code"
                   element={

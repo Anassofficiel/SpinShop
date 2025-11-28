@@ -1,6 +1,7 @@
 // src/pages/Store.tsx
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Sparkles, Zap, Star, TrendingUp, Gift, Clock } from 'lucide-react';
 
 import Header from '../components/Header/Header';
 import CountdownTimer from '../components/UI/CountdownTimer';
@@ -11,222 +12,493 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/UI/card';
-import countriesData from '../data/countries.json';
 import { useOffer } from '../context/OfferContext';
-import { cn } from '../lib/utils';
+
+// ------------------------------------
+// Types
+// ------------------------------------
+
+type LocalizedText = {
+  ar: string;
+  fr: string;
+  en: string;
+};
+
+type Collection = {
+  id: string;
+  route: string;
+  image: string;
+  title: LocalizedText;
+  subtitle: LocalizedText;
+  badge?: string;
+  icon?: string;
+};
+
+// ------------------------------------
+// Collections (3 بطاقات رئيسية)
+// ------------------------------------
+
+const collections: Collection[] = [
+  {
+    id: 'tshirts',
+    route: '/collection/tshirts',
+    image:
+      'https://via.placeholder.com/600x400.png?text=Morocco+Football+T-Shirts',
+    title: {
+      ar: 'تيشرتات / تونيّات كرة القدم',
+      fr: 'T-Shirts & Maillots',
+      en: 'Football T-Shirts',
+    },
+    subtitle: {
+      ar: 'قمصان رسمية وكاجوال مستوحاة من منتخب المغرب وفلسطين لعشّاق الكرة الصغار.',
+      fr: 'Maillots officiels et casual inspirés du Maroc et de la Palestine.',
+      en: 'Official and casual jerseys inspired by Morocco and Palestine.',
+    },
+    badge: 'NEW',
+    icon: '👕',
+  },
+  {
+    id: 'caps',
+    route: '/collection/caps',
+    image:
+      'https://via.placeholder.com/600x400.png?text=Caps+and+Hats+Collection',
+    title: {
+      ar: 'قبّعات وكاسكيطات',
+      fr: 'Caps & Hats',
+      en: 'Caps & Hats',
+    },
+    subtitle: {
+      ar: 'كاسكيطات، بونيّات و Bob Hats بألوان العلم المغربي والفلسطيني.',
+      fr: 'Casquettes et bonnets aux couleurs du Maroc et de la Palestine.',
+      en: 'Caps and beanies in Morocco & Palestine colors.',
+    },
+    badge: 'HOT',
+    icon: '🧢',
+  },
+  {
+    id: 'accessories',
+    route: '/collection/accessories',
+    image:
+      'https://via.placeholder.com/600x400.png?text=Football+Accessories',
+    title: {
+      ar: 'إكسسوارات كرة القدم',
+      fr: 'Football Accessories',
+      en: 'Football Accessories',
+    },
+    subtitle: {
+      ar: 'أعلام، شالات، صفّارات وإكسسوارات حماسية للمباريات الكبيرة.',
+      fr: 'Écharpes, drapeaux, sifflets et accessoires pour les grands matchs.',
+      en: 'Scarves, flags, whistles and more for big match days.',
+    },
+    badge: 'TOP',
+    icon: '🎯',
+  },
+];
+
+// ------------------------------------
+// Component
+// ------------------------------------
 
 const Store = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { currentOffer, timeRemaining } = useOffer();
 
-  const getLocalizedName = (country: (typeof countriesData)[number]) =>
-    country.name[i18n.language as keyof typeof country.name] || country.name.en;
+  // 🗣 اختيار اللغة لعنوان البطاقة
+  const lang: keyof LocalizedText = i18n.language.startsWith('fr')
+    ? 'fr'
+    : i18n.language.startsWith('en')
+    ? 'en'
+    : 'ar';
+
+  const pick = (text: LocalizedText) => text[lang];
+
+  // ✅ هل عندنا عرض فعّال من العجلة؟
+  const hasActiveOffer =
+    currentOffer &&
+    (currentOffer.type === 'discount' || currentOffer.type === 'shipping');
+
+  let offerTitle = '';
+  let offerDescription = '';
+
+  if (currentOffer?.type === 'discount') {
+    const value = currentOffer.value || 0;
+    offerTitle =
+      t('store.offer.discountTitle', `كل منتجاتك الآن بـ -${value}%`) ??
+      `كل منتجاتك الآن بـ -${value}%`;
+    offerDescription =
+      t(
+        'store.offer.discountDescription',
+        'الخصم يُطبَّق تلقائيًا في سلة المشتريات قبل انتهاء الوقت.'
+      ) ??
+      'الخصم يُطبَّق تلقائيًا في سلة المشتريات قبل انتهاء الوقت.';
+  } else if (currentOffer?.type === 'shipping') {
+    offerTitle =
+      t('store.offer.shippingTitle', 'توصيل مجاني على جميع طلباتك الحالية 🚚') ??
+      'توصيل مجاني على جميع طلباتك الحالية 🚚';
+    offerDescription =
+      t(
+        'store.offer.shippingDescription',
+        'استمتع بالشحن المجاني إلى باب منزلك قبل انتهاء هذا العرض.'
+      ) ??
+      'استمتع بالشحن المجاني إلى باب منزلك قبل انتهاء هذا العرض.';
+  }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100">
-      <Header />
-
-      {/* خلفية “بالونات” ملونة تتحرك بلُطف */}
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 opacity-70"
-        aria-hidden="true"
-      >
-        <div className="absolute -top-32 left-10 h-56 w-56 rounded-full bg-pink-500/30 blur-3xl animate-pulse" />
-        <div className="absolute -top-10 right-10 h-40 w-40 rounded-full bg-amber-400/35 blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-1/4 h-60 w-60 rounded-full bg-sky-500/30 blur-3xl animate-pulse" />
-        <div className="absolute bottom-10 right-0 h-44 w-44 rounded-full bg-emerald-400/30 blur-3xl animate-pulse" />
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      {/* خلفية متحركة بالأشكال الهندسية */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full blur-2xl animate-float" />
+        <div className="absolute top-40 right-20 w-40 h-40 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full blur-3xl animate-float-delayed" />
+        <div className="absolute bottom-32 left-1/4 w-36 h-36 bg-gradient-to-br from-yellow-200 to-orange-200 rounded-full blur-2xl animate-float-slow" />
+        <div className="absolute top-1/3 right-1/3 w-28 h-28 bg-gradient-to-br from-green-200 to-emerald-200 rounded-full blur-2xl animate-float" />
+        <div className="absolute bottom-20 right-1/4 w-44 h-44 bg-gradient-to-br from-rose-200 to-pink-200 rounded-full blur-3xl animate-float-delayed" />
       </div>
 
-      <main className="container mx-auto px-4 py-10">
-        {/* العنوان الرئيسي */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-black text-sky-100 mb-3">
-            {t('store.title') || 'اختر بلدك'}
-          </h1>
-          <p className="text-slate-300 text-sm md:text-base">
-            {t('store.subtitle') || 'اكتشف منتجات من جميع أنحاء العالم'}
-          </p>
-        </div>
+      <Header />
 
-        {/* 🔥 كرونو كبير + رسالة متحركة تحتو */}
-        {currentOffer && (
-          <div className="flex flex-col items-center gap-4 mb-12">
-            {/* الكرونو */}
-            <div className="relative">
-              {/* هالة / خيوط حول الكرونو */}
-              <div
-                className="pointer-events-none absolute -inset-6 bg-gradient-to-r from-amber-400/40 via-pink-400/25 to-sky-400/40 blur-2xl opacity-80"
-                aria-hidden="true"
-              />
-              <div
-                className="pointer-events-none absolute -top-3 -left-10 h-8 w-8 rounded-full bg-amber-300/80 blur-md"
-                aria-hidden="true"
-              />
-              <div
-                className="pointer-events-none absolute -bottom-4 -right-8 h-10 w-10 rounded-full bg-pink-400/80 blur-md"
-                aria-hidden="true"
-              />
-
-              <div className="relative flex items-center gap-3 rounded-full bg-[#020617] px-6 py-3 md:px-9 md:py-4 shadow-[0_22px_60px_rgba(245,158,11,0.65)] border border-amber-300/40">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400/90 text-[#111827] text-xl shadow-inner">
-                  ⏰
+      <main className="container mx-auto px-4 py-8 md:py-10 relative z-10">
+        {/* 🔁 حزام متحرّك احترافي */}
+        <section className="mb-10">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 shadow-2xl"
+               style={{
+                 boxShadow: '0 20px 60px rgba(59, 130, 246, 0.3)',
+               }}>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-blue-600 to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-pink-600 to-transparent z-10" />
+            <div className="relative px-6 py-4 overflow-hidden">
+              <div className="whitespace-nowrap flex gap-12 text-sm md:text-base font-bold text-white animate-[marquee_25s_linear_infinite]">
+                <span className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-yellow-300" />
+                  شحن سريع داخل المغرب
                 </span>
-                <div className="flex flex-col items-start md:flex-row md:items-center md:gap-3">
-                  <span className="text-xs md:text-sm font-semibold text-amber-100 whitespace-nowrap">
-                    {/* نخلي النص ثابت بالعربية باش مايبانش key */}
-                    ينتهي العرض خلال
-                  </span>
-                  <div className="text-lg md:text-2xl font-extrabold tracking-[0.35em] text-amber-50">
-                    <CountdownTimer timeRemaining={timeRemaining} />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* جملة دعائية متحركة محاطة بباندة وردية / ذهبية */}
-            <div className="relative">
-              <div
-                className="pointer-events-none absolute -inset-4 bg-gradient-to-r from-pink-500/30 via-rose-400/20 to-amber-300/30 blur-2xl opacity-80"
-                aria-hidden="true"
-              />
-              <div className="relative flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-400 px-6 py-2 shadow-lg">
-                <span className="text-xs md:text-sm font-bold text-white animate-pulse">
-                  اختر منتجاتك واستفد من العرض قبل فوات الأوان ✨
+                <span className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-300" />
+                  جودة ممتازة وخامات مريحة للأطفال
+                </span>
+                <span className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-yellow-300" />
+                  🇲🇦🇵🇸 تصاميم حصرية للمغرب وفلسطين
+                </span>
+                <span className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-green-300" />
+                  خصومات إضافية من عجلة الحظ
+                </span>
+                <span className="flex items-center gap-2">
+                  <Gift className="w-5 h-5 text-rose-300" />
+                  عروض محدودة الكمية – سارع بالطلب
+                </span>
+                {/* تكرار للحركة المستمرة */}
+                <span className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-yellow-300" />
+                  شحن سريع داخل المغرب
+                </span>
+                <span className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-300" />
+                  جودة ممتازة وخامات مريحة للأطفال
                 </span>
               </div>
             </div>
           </div>
-        )}
+        </section>
 
-        {/* شبكة الكروت ديال الدول */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {countriesData.map((country) => {
-            const localizedName = getLocalizedName(country);
-            const isMorocco = country.code === 'MA';
+        {/* العنوان الرئيسي للمتجر */}
+        <section className="text-center mb-12">
+          <div className="relative inline-block">
+            <h1 className="text-5xl md:text-7xl font-black mb-4 animate-fadeIn"
+                style={{
+                  fontFamily: 'Cairo, sans-serif',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 25%, #ec4899 50%, #f59e0b 75%, #10b981 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}>
+              {t('store.chooseProducts', '⚽ اختر منتجاتك المفضلة')}
+            </h1>
+          </div>
+          <p className="text-lg md:text-xl text-slate-700 font-bold mt-4 max-w-3xl mx-auto"
+             style={{ fontFamily: 'Cairo, sans-serif' }}>
+            {t(
+              'store.footballSubtitle',
+              '🇲🇦 اكتشف جميع المنتجات الخاصة بكرة القدم المغربية والفلسطينية للأطفال 🇵🇸'
+            )}
+          </p>
+        </section>
 
-            const maTags = [
-              'Goalkeeper Jerseys',
-              'Training & Warm-up',
-              'Kids full kits',
-              'Kids Lifestyle & Hoodies',
-              'Home & Away Kits',
-            ];
+        {/* بانر العرض الاحترافي */}
+        {hasActiveOffer && (
+          <section className="mb-12 animate-slideDown">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 border-4 border-green-400 shadow-2xl px-8 py-6 md:px-12 md:py-8"
+                 style={{
+                   boxShadow: '0 25px 80px rgba(34, 197, 94, 0.35)',
+                 }}>
+              {/* تأثيرات الخلفية */}
+              <div className="absolute -top-16 -left-16 h-32 w-32 rounded-full bg-green-300/40 blur-3xl animate-pulse" />
+              <div className="absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-emerald-300/40 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+              
+              {/* نجوم متلألئة */}
+              <div className="absolute top-4 right-8 animate-spin-slow">
+                <Sparkles className="w-6 h-6 text-yellow-500" />
+              </div>
+              <div className="absolute bottom-4 left-8 animate-spin-slow" style={{ animationDelay: '0.5s' }}>
+                <Star className="w-5 h-5 text-pink-500" />
+              </div>
 
-            return (
-              <Card
-                key={country.code}
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate(`/country/${country.code}`)}
-                className={cn(
-                  'relative overflow-hidden rounded-3xl border-0 cursor-pointer transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-[0_26px_70px_rgba(0,0,0,0.55)]',
-                  isMorocco
-                    ? 'bg-gradient-to-br from-[#b91c1c] via-[#e11d48] to-[#16a34a] text-white shadow-[0_25px_70px_rgba(220,38,38,0.75)]'
-                    : 'bg-slate-900/95 text-slate-50 shadow-[0_18px_40px_rgba(15,23,42,0.8)]'
-                )}
-              >
-                {/* زخارف ضوئية */}
-                {isMorocco && (
-                  <>
-                    <div className="pointer-events-none absolute -top-20 -left-16 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-24 -right-10 h-52 w-52 rounded-full bg-black/30 blur-3xl" />
-                  </>
-                )}
+              <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div className="flex-1">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 text-sm font-black text-white mb-4 shadow-lg animate-bounce-slow">
+                    <Gift className="w-5 h-5" />
+                    <span>
+                      {t(
+                        'store.activeOffer',
+                        '🎁 عرضك من عجلة الحظ مُفعَّل الآن'
+                      )}
+                    </span>
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-black mb-3"
+                      style={{ 
+                        fontFamily: 'Cairo, sans-serif',
+                        background: 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}>
+                    {offerTitle}
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-700 font-semibold"
+                     style={{ fontFamily: 'Cairo, sans-serif' }}>
+                    {offerDescription}
+                  </p>
+                </div>
 
-                {/* دائرة كبيرة وسط الكارت بعلم المغرب / نجمة خضراء */}
-                {isMorocco && (
-                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-30">
-                    <div className="h-40 w-40 rounded-full bg-[#b91c1c] border-2 border-white/70 flex items-center justify-center shadow-[0_0_40px_rgba(248,250,252,0.7)]">
-                      <span className="text-6xl font-black text-emerald-400 drop-shadow-[0_0_20px_rgba(22,163,74,0.9)]">
-                        ★
+                <div className="shrink-0">
+                  <div className="relative flex items-center gap-4 rounded-2xl border-4 border-yellow-400 bg-white px-6 py-5 md:px-8 md:py-6 shadow-2xl"
+                       style={{
+                         boxShadow: '0 20px 50px rgba(234, 179, 8, 0.4)',
+                       }}>
+                    {/* تأثير وهج */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-100/50 to-orange-100/50 animate-pulse" />
+                    
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 shadow-xl animate-pulse">
+                      <Clock className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="relative flex flex-col">
+                      <span className="text-xs md:text-sm text-slate-600 font-bold mb-1">
+                        ينتهي العرض خلال
+                      </span>
+                      <span className="font-mono text-2xl md:text-3xl font-black tracking-wider bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                        <CountdownTimer timeRemaining={timeRemaining} />
                       </span>
                     </div>
                   </div>
-                )}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
-                <CardHeader className="relative z-10 flex flex-row items-center justify-between pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-black/30 px-3 py-1 text-[11px] font-semibold tracking-[0.25em] uppercase text-slate-100">
-                      {country.code}
-                    </span>
-                    <span className="rounded-full bg-black/40 px-3 py-1 text-[11px] font-semibold uppercase text-slate-100/90">
-                      {(country as any).sportLabel || 'FOOTBALL'}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <span className="rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-bold tracking-wide">
-                      {country.code}
-                    </span>
-                    <span className="rounded-full bg-black/15 px-2.5 py-1 text-[11px] font-bold tracking-wide">
-                      {country.code}
-                    </span>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="relative z-10 px-6 pb-6">
-                  {/* عنوان و عدد المنتجات */}
-                  <div className="flex items-baseline justify-between mb-2">
-                    <CardTitle className="text-2xl md:text-3xl font-black tracking-tight">
-                      {localizedName}
-                    </CardTitle>
-                    <p className="text-xs md:text-sm font-medium text-slate-100/90">
-                      {country.productCount} منتج
-                    </p>
-                  </div>
-
-                  {/* وصف قصير */}
-                  <p className="mb-4 text-xs md:text-sm leading-relaxed text-slate-50/90">
-                    {isMorocco
-                      ? 'قمصان الدار والإياب، حراس المرمى، أطقم التدريب وقطع كاجوال مستوحاة من أسود الأطلس لمحبّي كرة القدم الصغار.'
-                      : country.description ||
-                        'اكتشف تشكيلتنا المختارة من المنتجات الخاصة بهذا البلد.'}
-                  </p>
-
-                  {/* تاغات */}
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {(isMorocco ? maTags : country.highlights || []).map(
-                      (tag) => (
-                        <span
-                          key={tag}
-                          className={cn(
-                            'rounded-full px-3 py-1 text-[11px] font-semibold',
-                            isMorocco
-                              ? 'bg-black/35 text-amber-100 border border-amber-200/40'
-                              : 'bg-slate-800 text-slate-100 border border-slate-700'
-                          )}
-                        >
-                          {tag}
+        {/* 3 بطاقات Collections احترافية */}
+        <section className="mb-16">
+          <div className="grid gap-10 md:grid-cols-3">
+            {collections.map((col, index) => (
+              <div
+                key={col.id}
+                className="animate-fadeInUp"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <Card
+                  className="group relative flex cursor-pointer flex-col overflow-hidden rounded-3xl border-2 border-slate-200 bg-white shadow-xl transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:border-blue-400"
+                  onClick={() => navigate(col.route)}
+                >
+                  {/* مؤشر الخصم الثابت في الأعلى */}
+                  {hasActiveOffer && currentOffer?.type === 'discount' && (
+                    <div className="absolute top-4 right-4 z-30 flex items-center gap-2 rounded-2xl bg-gradient-to-r from-red-500 via-pink-500 to-rose-500 px-4 py-3 shadow-2xl border-2 border-white animate-bounce-slow"
+                         style={{
+                           boxShadow: '0 10px 40px rgba(239, 68, 68, 0.5)',
+                         }}>
+                      <Gift className="w-5 h-5 text-white" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-white/90">خصم فعّال</span>
+                        <span className="text-xl font-black text-white leading-none">
+                          -{currentOffer.value}%
                         </span>
-                      )
-                    )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* مؤشر الشحن المجاني */}
+                  {hasActiveOffer && currentOffer?.type === 'shipping' && (
+                    <div className="absolute top-4 right-4 z-30 flex items-center gap-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-3 shadow-2xl border-2 border-white animate-bounce-slow"
+                         style={{
+                           boxShadow: '0 10px 40px rgba(34, 197, 94, 0.5)',
+                         }}>
+                      <Gift className="w-5 h-5 text-white" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-white">شحن مجاني</span>
+                        <span className="text-sm font-black text-white leading-none">🚚</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* وهج عند الـ Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-blue-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/10 transition-all duration-500 rounded-3xl" />
+
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-3xl bg-gradient-to-br from-slate-100 to-slate-200">
+                    <img
+                      src={col.image}
+                      alt={pick(col.title)}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+                    
+                    {/* الشارات */}
+                    <div className="absolute left-5 top-5 flex items-center gap-3 z-20">
+                      {col.badge && (
+                        <span className="rounded-full bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 text-sm font-black text-white shadow-xl border-2 border-white/70 animate-pulse">
+                          {col.badge}
+                        </span>
+                      )}
+                      <span className="rounded-full bg-white/95 backdrop-blur-sm px-4 py-2 text-sm font-bold text-slate-800 border-2 border-slate-200">
+                        ⚽ Kids
+                      </span>
+                    </div>
+
+                    {/* الأيقونة الكبيرة */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-8xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-500 filter drop-shadow-2xl">
+                      {col.icon}
+                    </div>
+                    
+                    {/* المحتوى */}
+                    <div className="absolute bottom-5 left-5 right-5 z-20">
+                      <h3 className="text-2xl md:text-3xl font-black text-white drop-shadow-2xl mb-2 group-hover:text-yellow-300 transition-colors duration-300"
+                          style={{ fontFamily: 'Cairo, sans-serif' }}>
+                        {pick(col.title)}
+                      </h3>
+                      <p className="text-sm md:text-base text-white font-semibold line-clamp-2 drop-shadow-lg"
+                         style={{ fontFamily: 'Cairo, sans-serif' }}>
+                        {pick(col.subtitle)}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* الزر مازال كاين، ولكن الكارت كامل كيتضغط */}
-                  <div className="flex justify-end">
+                  {/* Accessible header */}
+                  <CardHeader className="sr-only">
+                    <CardTitle>{pick(col.title)}</CardTitle>
+                  </CardHeader>
+
+                  <CardContent className="relative flex flex-1 flex-col justify-between px-6 pb-6 pt-5 z-10 bg-gradient-to-b from-white to-slate-50">
+                    <p className="mb-4 text-sm md:text-base text-slate-600 font-semibold"
+                       style={{ fontFamily: 'Cairo, sans-serif' }}>
+                      {t(
+                        'store.collectionHint',
+                        'اضغط لاكتشاف جميع المنتجات داخل هذه المجموعة.'
+                      )}
+                    </p>
                     <Button
                       size="lg"
-                      onClick={(e) => {
-                        e.stopPropagation(); // باش مايتكرر الnavigate
-                        navigate(`/country/${country.code}`);
+                      className="relative mt-auto w-full rounded-2xl text-lg font-black text-white shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl overflow-hidden border-2 border-transparent group-hover:border-white/50"
+                      style={{
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%)',
+                        fontFamily: 'Cairo, sans-serif',
                       }}
-                      className={cn(
-                        'rounded-full px-6 font-bold text-sm shadow-lg transition-transform hover:scale-105',
-                        isMorocco
-                          ? 'bg-white text-[#b91c1c] hover:bg-slate-100'
-                          : 'bg-sky-500 text-white hover:bg-sky-600'
-                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(col.route);
+                      }}
                     >
-                      {t('store.viewProducts') || 'عرض المنتجات'}
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        <Sparkles className="w-5 h-5" />
+                        {t('store.viewProducts', 'عرض المنتجات')}
+                      </span>
+                      {/* تأثير متوهج */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                     </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
+
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-30px) scale(1.1); }
+        }
+
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-40px) scale(1.15); }
+        }
+
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        @keyframes spin-slow {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-float {
+          animation: float 8s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+          animation: float-delayed 10s ease-in-out infinite;
+        }
+
+        .animate-float-slow {
+          animation: float-slow 12s ease-in-out infinite;
+        }
+
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 2s ease-in-out infinite;
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 1s ease-out;
+        }
+
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+          opacity: 0;
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.8s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
