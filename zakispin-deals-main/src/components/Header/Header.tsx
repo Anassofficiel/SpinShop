@@ -155,8 +155,8 @@ const Header = () => {
                       wordBreak: 'break-all',
                       lineHeight: '1.4'
                     }}
-                  >
-                    {user?.email}
+                  >     
+                         {user?.email}
                   </div>
                 </DropdownMenuItem>
 
